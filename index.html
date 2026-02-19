@@ -366,35 +366,17 @@ const text = `
 🥂 Алкоголь: ${alcohol}
 `;
 
-fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
-method:"POST",
-headers:{
-'Content-Type':'application/json'
-},
-body:JSON.stringify({
-chat_id:CHAT_ID,
-text:text,
-parse_mode:"HTML"
-})
-})
-.then(response=>response.json())
-.then(data=>{
-if(data.ok){
-alert("Спасибо! Ваш ответ отправлен 🤍");
-}else{
-alert("Ошибка отправки. Проверьте токен.");
-}
-})
-.catch(error=>{
-alert("Ошибка соединения.");
-console.log(error);
-});
+const url = `https://api.telegram.org/bot${BOT_TOKEN}/sendMessage?chat_id=${CHAT_ID}&text=${text}`;
 
+window.open(url, "_blank");
+
+alert("Спасибо! Ответ отправлен 🤍");
 }
 </script>
 
 
 </body>
 </html>
+
 
 

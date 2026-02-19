@@ -16,31 +16,6 @@ color:#2d2d2d;
 overflow-x:hidden;
 }
 
-/* ===== 100% REAL IMAGE ENVELOPE ===== */
-
-.envelope-screen{
-position:fixed;
-inset:0;
-background:url("envelope-bg.jpg") no-repeat center center;
-background-size:cover;
-display:flex;
-align-items:center;
-justify-content:center;
-z-index:999;
-}
-
-/* Кнопка-печать поверх */
-.wax-seal{
-position:absolute;
-top:56%;
-left:50%;
-transform:translate(-50%,-50%);
-width:140px;
-height:140px;
-border-radius:50%;
-cursor:pointer;
-}
-
 /* ===== ШАПКА ===== */
 .header{
 background:#b39a82;
@@ -148,13 +123,6 @@ cursor:pointer;
 
 <body>
 
-<!-- ===== ЭКРАН С КОНВЕРТОМ ===== -->
-<div class="envelope-screen" id="envelopeScreen">
-<div class="wax-seal" onclick="openInvite()"></div>
-</div>
-
-<div id="mainContent" style="display:none;">
-
 <div class="header">Приглашение</div>
 
 <!-- БЛОК 1 -->
@@ -173,7 +141,7 @@ cursor:pointer;
 
 <div class="script" style="font-size:22px;">A + M = ♥</div>
 
-<p style="letter-spacing:3px;">МЫ ВЫРОСЛИ, И ТЕПЕРЬ НАМ МОЖНО</p>
+<p style="letter-spacing:3px;">МЫ ВЫРОСЛИ, И ТЕЙПЕРЬ НАМ МОЖНО</p>
 <p>25 ИЮНЯ 2026</p>
 
 <div class="timer">
@@ -267,22 +235,14 @@ cursor:pointer;
 </div>
 </div>
 
-</div>
-
 <script>
-function openInvite(){
-document.getElementById("envelopeScreen").classList.add("fade-out");
-setTimeout(()=>{
-document.getElementById("envelopeScreen").style.display="none";
-document.getElementById("mainContent").style.display="block";
-window.scrollTo(0,0);
-},1000);
-}
 
 /* Анимация появления */
-function openInvite(){
-document.getElementById("envelopeScreen").style.display="none";
-document.getElementById("mainContent").style.display="block";
+const blocks=document.querySelectorAll(".section, .final-block");
+window.addEventListener("scroll",()=>{
+blocks.forEach(block=>{
+if(block.getBoundingClientRect().top < window.innerHeight-100){
+block.classList.add("visible");
 }
 });
 });
@@ -298,10 +258,10 @@ document.getElementById("minutes").innerText=Math.floor((diff%(1000*60*60))/(100
 document.getElementById("seconds").innerText=Math.floor((diff%(1000*60))/1000);
 },1000);
 
-/* ===== RSVP TELEGRAM ===== */
+/* RSVP TELEGRAM */
 function sendRSVP(){
 
-const BOT_TOKEN="8224575397:AAEeuXrh30qGw5dgs6QvqCZ299U29OMW-T8";
+const BOT_TOKEN="8224575397:AAHmpl9FdIEzFk9-pYJefVFUJ0qvMOTyB6U";
 const CHAT_ID="629171218";
 
 const name=document.getElementById("name").value;
@@ -314,51 +274,30 @@ alert("Пожалуйста, укажите имя 🤍");
 return;
 }
 
-const text = `
-💍 Новое подтверждение!
-
-👤 Имя: ${name}
-📌 Статус: ${attendance}
-🍽 Предпочтения: ${food}
-🥂 Алкоголь: ${alcohol}
-`;
+const text = `💍 Новое подтверждение!
+Имя: ${name}
+Статус: ${attendance}
+Еда: ${food}
+Алкоголь: ${alcohol}`;
 
 fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
 method:"POST",
-headers:{
-'Content-Type':'application/json'
-},
-body:JSON.stringify({
-chat_id:CHAT_ID,
-text:text,
-parse_mode:"HTML"
+headers:{'Content-Type':'application/json'},
+body:JSON.stringify({chat_id:CHAT_ID,text:text})
 })
-})
-.then(response=>response.json())
+.then(res=>res.json())
 .then(data=>{
 if(data.ok){
-alert("Спасибо! Ваш ответ отправлен 🤍");
+alert("Спасибо! Ответ отправлен 🤍");
 }else{
-alert("Ошибка отправки. Проверьте токен.");
+alert("Ошибка отправки.");
 }
 })
-.catch(error=>{
+.catch(()=>{
 alert("Ошибка соединения.");
-console.log(error);
 });
-
 }
 </script>
 
-
 </body>
 </html>
-
-
-
-
-
-
-
-
-

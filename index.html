@@ -16,123 +16,29 @@ color:#2d2d2d;
 overflow-x:hidden;
 }
 
-/* ===== REALISTIC PAPER ENVELOPE ===== */
+/* ===== 100% REAL IMAGE ENVELOPE ===== */
 
 .envelope-screen{
 position:fixed;
 inset:0;
-background:#e4d9c6;
-background-image:url("https://www.transparenttextures.com/patterns/aged-paper.png");
+background:url("envelope-bg.jpg") no-repeat center center;
 background-size:cover;
-display:flex;
-flex-direction:column;
-justify-content:space-between;
-align-items:center;
-text-align:center;
-padding:80px 30px 50px 30px;
-z-index:999;
-}
-
-/* Заголовок */
-.invite-title{
-font-family:'Cormorant Garamond',serif;
-font-weight:400;
-font-size:34px;
-letter-spacing:4px;
-line-height:1.3;
-color:#2e2e2e;
-}
-
-/* Красный текст */
-.invite-sub{
-font-family:'Great Vibes',cursive;
-font-size:36px;
-color:#c62828;
-margin-top:18px;
-}
-
-/* Центр */
-.envelope-center{
-position:relative;
-width:100%;
-max-width:380px;
-height:280px;
-margin-top:60px;
-}
-
-/* Верхняя створка */
-.flap-top{
-position:absolute;
-top:0;
-left:0;
-width:100%;
-height:50%;
-background:#d8ccb7;
-clip-path:polygon(0 0,100% 0,50% 100%);
-box-shadow:0 8px 20px rgba(0,0,0,0.08);
-}
-
-/* Нижняя левая */
-.flap-left{
-position:absolute;
-bottom:0;
-left:0;
-width:50%;
-height:50%;
-background:#d0c4ad;
-clip-path:polygon(0 100%,100% 0,0 0);
-}
-
-/* Нижняя правая */
-.flap-right{
-position:absolute;
-bottom:0;
-right:0;
-width:50%;
-height:50%;
-background:#d0c4ad;
-clip-path:polygon(100% 100%,0 0,100% 0);
-}
-
-/* Сургуч */
-.wax-seal{
-position:absolute;
-top:50%;
-left:50%;
-transform:translate(-50%,-50%);
-width:150px;
-height:150px;
-background:radial-gradient(circle at 30% 30%, #b22222, #7d0f0f);
-border-radius:50%;
 display:flex;
 align-items:center;
 justify-content:center;
-color:#f5e8d4;
-font-size:22px;
-letter-spacing:3px;
-box-shadow:
-0 15px 40px rgba(0,0,0,0.35),
-inset 0 8px 15px rgba(255,255,255,0.15);
+z-index:999;
+}
+
+/* Кнопка-печать поверх */
+.wax-seal{
+position:absolute;
+top:56%;
+left:50%;
+transform:translate(-50%,-50%);
+width:140px;
+height:140px;
+border-radius:50%;
 cursor:pointer;
-transition:0.3s;
-}
-
-.wax-seal:active{
-transform:translate(-50%,-50%) scale(0.95);
-}
-
-/* Нижний текст */
-.invite-footer{
-font-size:16px;
-line-height:1.6;
-max-width:330px;
-color:#333;
-}
-
-.envelope-screen.fade-out{
-opacity:0;
-transition:1s;
-pointer-events:none;
 }
 
 /* ===== ШАПКА ===== */
@@ -244,35 +150,7 @@ cursor:pointer;
 
 <!-- ===== ЭКРАН С КОНВЕРТОМ ===== -->
 <div class="envelope-screen" id="envelopeScreen">
-
-<div>
-<div class="invite-title">
-ВЫ ПРИГЛАШЕНЫ<br>НА СВАДЬБУ
-</div>
-
-<div class="invite-sub">
-The wedding day
-</div>
-</div>
-
-<div class="envelope-center">
-
-<div class="flap-top"></div>
-<div class="flap-left"></div>
-<div class="flap-right"></div>
-
-<div class="wax-seal" onclick="openInvite()">
-НАЖМИТЕ
-</div>
-
-</div>
-
-<div class="invite-footer">
-Это приглашение адресовано вам не случайно!  
-В этот особенный день нам особенно важно,  
-чтобы вы были рядом с нами!
-</div>
-
+<div class="wax-seal" onclick="openInvite()"></div>
 </div>
 
 <div id="mainContent" style="display:none;">
@@ -402,11 +280,9 @@ window.scrollTo(0,0);
 }
 
 /* Анимация появления */
-const blocks=document.querySelectorAll(".section, .final-block");
-window.addEventListener("scroll",()=>{
-blocks.forEach(block=>{
-if(block.getBoundingClientRect().top < window.innerHeight-100){
-block.classList.add("visible");
+function openInvite(){
+document.getElementById("envelopeScreen").style.display="none";
+document.getElementById("mainContent").style.display="block";
 }
 });
 });
@@ -477,6 +353,7 @@ console.log(error);
 
 </body>
 </html>
+
 
 
 

@@ -32,6 +32,10 @@ transform:translateY(40px);
 transition:1.2s ease;
 }
 
+<audio id="bgMusic" loop>
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+  
 .section.visible, .final-block.visible{
 opacity:1;
 transform:translateY(0);
@@ -238,13 +242,12 @@ cursor:pointer;
 <script>
 
 /* Музыка */
-window.addEventListener("load", function() {
-const music = document.getElementById("bgMusic");
+document.addEventListener("DOMContentLoaded", function() {
+  const music = document.getElementById("bgMusic");
 
-document.body.addEventListener("click", function(){
-music.play();
-}, { once: true });
-
+  document.addEventListener("click", function(){
+    music.play().catch(() => {});
+  }, { once: true });
 });
   
 /* Анимация появления */
@@ -309,11 +312,9 @@ alert("Ошибка соединения.");
 }
 </script>
 
-<audio id="bgMusic" loop>
-<source src="music.mp3" type="audio/mpeg">
-</audio>
   
 </body>
 </html>
+
 
 

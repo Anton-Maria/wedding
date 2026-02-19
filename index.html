@@ -16,59 +16,99 @@ color:#2d2d2d;
 overflow-x:hidden;
 }
 
-/* ===== КОНВЕРТ ===== */
+/* ===== НОВЫЙ КОНВЕРТ (как на скрине) ===== */
+
 .envelope-screen{
 position:fixed;
 inset:0;
-background:#e8f0ea;
+background:#e6dccb;
+background-image: url("https://www.transparenttextures.com/patterns/old-paper.png");
 display:flex;
+flex-direction:column;
 align-items:center;
 justify-content:center;
+text-align:center;
 z-index:999;
+padding:30px;
 }
 
-.envelope{
-width:320px;
-height:200px;
-background:#b8cbb6;
+.invite-title{
+font-family:'Cormorant Garamond',serif;
+font-size:42px;
+letter-spacing:3px;
+margin-bottom:10px;
+}
+
+.invite-sub{
+font-family:'Great Vibes',cursive;
+font-size:36px;
+color:#b12a2a;
+margin-bottom:40px;
+}
+
+.envelope-wrapper{
 position:relative;
+width:350px;
+height:250px;
 cursor:pointer;
-border-radius:6px;
-box-shadow:0 20px 40px rgba(0,0,0,0.15);
-transition:1s;
 }
 
-.envelope:before{
-content:"";
+.envelope-body{
 position:absolute;
-top:-100px;
+bottom:0;
+width:100%;
+height:200px;
+background:#d9cdb8;
+}
+
+.envelope-left,
+.envelope-right{
+position:absolute;
+bottom:0;
+width:50%;
+height:200px;
+background:#cfc2aa;
+}
+
+.envelope-left{
 left:0;
-border-left:160px solid transparent;
-border-right:160px solid transparent;
-border-bottom:100px solid #a6bca4;
-transition:1s;
+clip-path:polygon(0 0,100% 0,0 100%);
 }
 
-.envelope.open:before{
-transform:rotateX(180deg);
-transform-origin:top;
+.envelope-right{
+right:0;
+clip-path:polygon(100% 0,100% 100%,0 0);
 }
 
-.seal{
+.wax-seal{
 position:absolute;
-width:60px;
-height:60px;
-background:#8b3a3a;
-border-radius:50%;
 top:70px;
-left:130px;
+left:50%;
+transform:translateX(-50%);
+width:140px;
+height:140px;
+background:radial-gradient(circle at 30% 30%, #a11f1f, #7d1515);
+border-radius:50%;
 display:flex;
 align-items:center;
 justify-content:center;
-color:white;
-font-family:'Great Vibes';
-font-size:22px;
-box-shadow:0 4px 10px rgba(0,0,0,0.3);
+color:#e6dccb;
+font-size:26px;
+letter-spacing:2px;
+box-shadow:0 8px 20px rgba(0,0,0,0.3);
+transition:0.5s;
+}
+
+.envelope-screen.fade-out{
+opacity:0;
+transition:1s;
+pointer-events:none;
+}
+
+.invite-footer{
+margin-top:40px;
+font-size:18px;
+max-width:600px;
 }
 
 .open-text{
@@ -188,10 +228,33 @@ cursor:pointer;
 
 <!-- ===== ЭКРАН С КОНВЕРТОМ ===== -->
 <div class="envelope-screen" id="envelopeScreen">
-<div class="envelope" onclick="openInvite()" id="envelope">
-<div class="seal">A&M</div>
-<div class="open-text">Открыть приглашение</div>
+
+<div class="invite-title">
+ВЫ ПРИГЛАШЕНЫ НА<br>СВАДЬБУ
 </div>
+
+<div class="invite-sub">
+The wedding day
+</div>
+
+<div class="envelope-wrapper" onclick="openInvite()">
+
+<div class="envelope-body"></div>
+<div class="envelope-left"></div>
+<div class="envelope-right"></div>
+
+<div class="wax-seal">
+НАЖМИТЕ
+</div>
+
+</div>
+
+<div class="invite-footer">
+Это приглашение адресовано вам не случайно!  
+В этот особенный день нам особенно важно,  
+чтобы вы были рядом с нами!
+</div>
+
 </div>
 
 <div id="mainContent" style="display:none;">
@@ -312,7 +375,7 @@ cursor:pointer;
 
 <script>
 function openInvite(){
-document.getElementById("envelope").classList.add("open");
+document.getElementById("envelopeScreen").classList.add("fade-out");
 setTimeout(()=>{
 document.getElementById("envelopeScreen").style.display="none";
 document.getElementById("mainContent").style.display="block";
@@ -396,6 +459,7 @@ console.log(error);
 
 </body>
 </html>
+
 
 
 

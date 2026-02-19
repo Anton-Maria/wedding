@@ -237,6 +237,16 @@ cursor:pointer;
 
 <script>
 
+/* Музыка */
+window.addEventListener("load", function() {
+const music = document.getElementById("bgMusic");
+
+document.body.addEventListener("click", function(){
+music.play();
+}, { once: true });
+
+});
+  
 /* Анимация появления */
 const blocks=document.querySelectorAll(".section, .final-block");
 window.addEventListener("scroll",()=>{
@@ -299,5 +309,10 @@ alert("Ошибка соединения.");
 }
 </script>
 
+<audio id="bgMusic" loop>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+  
 </body>
 </html>
+

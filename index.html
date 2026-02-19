@@ -3,7 +3,6 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
 <title>Антон & Мария — 25.06.2026</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;500&family=Great+Vibes&display=swap" rel="stylesheet">
@@ -14,15 +13,91 @@ margin:0;
 background:#f4f1eb url("https://www.transparenttextures.com/patterns/paper-fibers.png");
 font-family:'Cormorant Garamond',serif;
 color:#2d2d2d;
+overflow-x:hidden;
 }
 
-/* ШАПКА */
+/* ===== КОНВЕРТ ===== */
+.envelope-screen{
+position:fixed;
+inset:0;
+background:#e8f0ea;
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:999;
+}
+
+.envelope{
+width:320px;
+height:200px;
+background:#b8cbb6;
+position:relative;
+cursor:pointer;
+border-radius:6px;
+box-shadow:0 20px 40px rgba(0,0,0,0.15);
+transition:1s;
+}
+
+.envelope:before{
+content:"";
+position:absolute;
+top:-100px;
+left:0;
+border-left:160px solid transparent;
+border-right:160px solid transparent;
+border-bottom:100px solid #a6bca4;
+transition:1s;
+}
+
+.envelope.open:before{
+transform:rotateX(180deg);
+transform-origin:top;
+}
+
+.seal{
+position:absolute;
+width:60px;
+height:60px;
+background:#8b3a3a;
+border-radius:50%;
+top:70px;
+left:130px;
+display:flex;
+align-items:center;
+justify-content:center;
+color:white;
+font-family:'Great Vibes';
+font-size:22px;
+box-shadow:0 4px 10px rgba(0,0,0,0.3);
+}
+
+.open-text{
+position:absolute;
+bottom:15px;
+width:100%;
+text-align:center;
+letter-spacing:2px;
+}
+
+/* ===== ШАПКА ===== */
 .header{
 background:#b39a82;
 color:white;
 padding:18px;
 font-size:20px;
 letter-spacing:2px;
+}
+
+/* ===== АНИМАЦИЯ БЛОКОВ ===== */
+.section, .final-block{
+opacity:0;
+transform:translateY(40px);
+transition:1.2s ease;
+}
+
+.section.visible, .final-block.visible{
+opacity:1;
+transform:translateY(0);
 }
 
 .section{
@@ -111,11 +186,20 @@ cursor:pointer;
 
 <body>
 
+<!-- ===== ЭКРАН С КОНВЕРТОМ ===== -->
+<div class="envelope-screen" id="envelopeScreen">
+<div class="envelope" onclick="openInvite()" id="envelope">
+<div class="seal">A&M</div>
+<div class="open-text">Открыть приглашение</div>
+</div>
+</div>
+
+<div id="mainContent" style="display:none;">
+
 <div class="header">Приглашение</div>
 
 <!-- БЛОК 1 -->
 <div class="section">
-
 <div class="polaroid">
 <img src="anton.jpg">
 <div class="script" style="font-size:30px;">Антон</div>
@@ -139,12 +223,10 @@ cursor:pointer;
 <div><span id="minutes"></span>минут</div>
 <div><span id="seconds"></span>секунд</div>
 </div>
-
 </div>
 
 <!-- БЛОК 2 -->
 <div class="section">
-
 <div class="big-script script">Дорогой гость!</div>
 
 <p style="max-width:600px;margin:20px auto;font-size:20px;">
@@ -163,12 +245,10 @@ cursor:pointer;
 <div class="script" style="font-size:36px;margin-top:20px;">
 Там, где посеяна любовь,<br>растёт радость
 </div>
-
 </div>
 
 <!-- БЛОК 3 -->
 <div class="section">
-
 <h2>МЕНЮ</h2>
 <p>Меню разнообразно, поэтому сообщите нам заранее,
 если у Вас есть какие-либо предпочтения или
@@ -185,12 +265,10 @@ cursor:pointer;
 <p>Будем благодарны, если Вы воздержитесь от криков
 "Горько" на празднике, ведь поцелуй — это знак
 выражения чувств, он не может быть по заказу.</p>
-
 </div>
 
 <!-- БЛОК 4 -->
 <div class="final-block">
-
 <h2>ПОДТВЕРЖДЕНИЕ</h2>
 <p>Пожалуйста подтвердите своё присутствие до 01.01.2025</p>
 
@@ -207,21 +285,17 @@ cursor:pointer;
 </div>
 
 <div class="rsvp-box">
-
 <input type="text" id="name" placeholder="Ваше имя">
-
 <select id="attendance">
 <option value="Буду">С радостью приду</option>
 <option value="Не смогу">К сожалению, не смогу</option>
 </select>
-
 <select id="food">
 <option>Нет ограничений</option>
 <option>Не ем мясо</option>
 <option>Не ем рыбу</option>
 <option>Вегетарианец</option>
 </select>
-
 <select id="alcohol">
 <option>Красное вино</option>
 <option>Белое вино</option>
@@ -230,14 +304,33 @@ cursor:pointer;
 <option>Водка</option>
 <option>Не пью алкоголь</option>
 </select>
-
 <button onclick="sendRSVP()">Отправить</button>
-
+</div>
 </div>
 
 </div>
 
 <script>
+function openInvite(){
+document.getElementById("envelope").classList.add("open");
+setTimeout(()=>{
+document.getElementById("envelopeScreen").style.display="none";
+document.getElementById("mainContent").style.display="block";
+window.scrollTo(0,0);
+},1000);
+}
+
+/* Анимация появления */
+const blocks=document.querySelectorAll(".section, .final-block");
+window.addEventListener("scroll",()=>{
+blocks.forEach(block=>{
+if(block.getBoundingClientRect().top < window.innerHeight-100){
+block.classList.add("visible");
+}
+});
+});
+
+/* Таймер */
 const weddingDate=new Date("2026-06-25T15:30:00").getTime();
 setInterval(()=>{
 const now=new Date().getTime();
@@ -248,27 +341,58 @@ document.getElementById("minutes").innerText=Math.floor((diff%(1000*60*60))/(100
 document.getElementById("seconds").innerText=Math.floor((diff%(1000*60))/1000);
 },1000);
 
+/* ===== RSVP TELEGRAM ===== */
 function sendRSVP(){
+
 const BOT_TOKEN="ВСТАВЬ_СЮДА_ТОКЕН";
 const CHAT_ID="ВСТАВЬ_СЮДА_CHAT_ID";
 
-const text=`
-RSVP:
-Имя: ${document.getElementById("name").value}
-Статус: ${document.getElementById("attendance").value}
-Еда: ${document.getElementById("food").value}
-Алкоголь: ${document.getElementById("alcohol").value}
+const name=document.getElementById("name").value;
+const attendance=document.getElementById("attendance").value;
+const food=document.getElementById("food").value;
+const alcohol=document.getElementById("alcohol").value;
+
+if(!name){
+alert("Пожалуйста, укажите имя 🤍");
+return;
+}
+
+const text = `
+💍 Новое подтверждение!
+
+👤 Имя: ${name}
+📌 Статус: ${attendance}
+🍽 Предпочтения: ${food}
+🥂 Алкоголь: ${alcohol}
 `;
 
 fetch(`https://api.telegram.org/bot${BOT_TOKEN}/sendMessage`,{
 method:"POST",
-headers:{'Content-Type':'application/json'},
-body:JSON.stringify({chat_id:CHAT_ID,text:text})
+headers:{
+'Content-Type':'application/json'
+},
+body:JSON.stringify({
+chat_id:CHAT_ID,
+text:text,
+parse_mode:"HTML"
+})
+})
+.then(response=>response.json())
+.then(data=>{
+if(data.ok){
+alert("Спасибо! Ваш ответ отправлен 🤍");
+}else{
+alert("Ошибка отправки. Проверьте токен.");
+}
+})
+.catch(error=>{
+alert("Ошибка соединения.");
+console.log(error);
 });
 
-alert("Спасибо 🤍");
 }
 </script>
+
 
 </body>
 </html>

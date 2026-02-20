@@ -16,7 +16,7 @@ color:#2d2d2d;
 overflow-x:hidden;
 }
 
-/* ===== ШАПКА ===== */
+/* Шапка */
 .header{
 background:#b39a82;
 color:white;
@@ -25,35 +25,13 @@ font-size:20px;
 letter-spacing:2px;
 }
 
-/* ===== АНИМАЦИЯ БЛОКОВ ===== */
+/* Анимация */
 .section, .final-block{
 opacity:0;
 transform:translateY(40px);
 transition:1.2s ease;
 }
 
-<button id="musicToggle" 
-style="
-position:fixed;
-bottom:20px;
-right:20px;
-width:50px;
-height:50px;
-border-radius:50%;
-border:none;
-background:#b39a82;
-color:white;
-font-size:20px;
-box-shadow:0 5px 15px rgba(0,0,0,0.2);
-cursor:pointer;
-z-index:1000;">
-🔈
-</button>
-  
-<audio id="bgMusic" loop>
-  <source src="music.mp3" type="audio/mpeg">
-</audio>
-  
 .section.visible, .final-block.visible{
 opacity:1;
 transform:translateY(0);
@@ -140,6 +118,23 @@ border:none;
 color:white;
 cursor:pointer;
 }
+
+/* Кнопка музыки */
+#musicToggle{
+position:fixed;
+bottom:20px;
+right:20px;
+width:50px;
+height:50px;
+border-radius:50%;
+border:none;
+background:#b39a82;
+color:white;
+font-size:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+cursor:pointer;
+z-index:1000;
+}
 </style>
 </head>
 
@@ -201,123 +196,75 @@ cursor:pointer;
 <h2>МЕНЮ</h2>
 <p>Меню разнообразно, поэтому сообщите нам заранее,
 если у Вас есть какие-либо предпочтения или
-диетические ограничения. После подтверждения Вы
-сможете пройти опрос о своих вкусовых предпочтениях и напитках.</p>
-
-<h2 style="margin-top:40px;">ПОЖЕЛАНИЯ ПО ПОДАРКАМ</h2>
-<p>Ваше присутствие в день нашей свадьбы — самый значимый подарок для нас!</p>
-<p>Мы понимаем, что дарить цветы на свадьбу — это традиция,
-но мы не сможем наслаждаться их красотой в полной мере...
-Будем рады любой другой альтернативе (вино или в денежном эквиваленте).</p>
-
-<h2 style="margin-top:40px;">ПРИМЕЧАНИЕ</h2>
-<p>Будем благодарны, если Вы воздержитесь от криков
-"Горько" на празднике, ведь поцелуй — это знак
-выражения чувств, он не может быть по заказу.</p>
+диетические ограничения.</p>
 </div>
 
 <!-- БЛОК 4 -->
 <div class="final-block">
 <h2>ПОДТВЕРЖДЕНИЕ</h2>
-<p>Пожалуйста подтвердите своё присутствие до 01.01.2025</p>
-
-<div class="script" style="font-size:40px;">Ждём Вас на нашей свадьбе!</div>
-
-<p>Будем благодарны, если при выборе нарядов
-Вы придержитесь следующей палитры</p>
-
-<div class="palette">
-<div class="circle" style="background:#5b3b2b;"></div>
-<div class="circle" style="background:#9c8064;"></div>
-<div class="circle" style="background:#c4b29e;"></div>
-<div class="circle" style="background:#dedad3;"></div>
-</div>
+<p>Пожалуйста подтвердите своё присутствие</p>
 
 <div class="rsvp-box">
 <input type="text" id="name" placeholder="Ваше имя">
-<select id="attendance">
-<option value="Буду">С радостью приду</option>
-<option value="Не смогу">К сожалению, не смогу</option>
-</select>
-<select id="food">
-<option>Нет ограничений</option>
-<option>Не ем мясо</option>
-<option>Не ем рыбу</option>
-<option>Вегетарианец</option>
-</select>
-<select id="alcohol">
-<option>Красное вино</option>
-<option>Белое вино</option>
-<option>Шампанское</option>
-<option>Виски/коньяк</option>
-<option>Водка</option>
-<option>Не пью алкоголь</option>
-</select>
 <button onclick="sendRSVP()">Отправить</button>
 </div>
 </div>
 
+<!-- МУЗЫКА -->
+<audio id="bgMusic" loop>
+<source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<button id="musicToggle">🔈</button>
+
 <script>
+document.addEventListener("DOMContentLoaded", function(){
 
-document.addEventListener("DOMContentLoaded", function() {
+const music = document.getElementById("bgMusic");
+const musicBtn = document.getElementById("musicToggle");
 
-  /* ===== МУЗЫКА ===== */
-  const music = document.getElementById("bgMusic");
-  const musicBtn = document.getElementById("musicToggle");
+/* Запуск музыки при первом клике */
+document.addEventListener("click", function firstClick(){
+music.play().then(()=>{
+musicBtn.innerText="🔊";
+}).catch(()=>{});
+document.removeEventListener("click", firstClick);
+});
 
-  // Первый клик по экрану запускает музыку (обязательно для iPhone)
-  document.addEventListener("click", function firstClick() {
-      music.play().then(()=>{
-          musicBtn.innerText = "🔊";
-      }).catch(()=>{});
-      document.removeEventListener("click", firstClick);
-  });
+/* Кнопка вкл/выкл */
+musicBtn.addEventListener("click", function(e){
+e.stopPropagation();
+if(music.paused){
+music.play();
+musicBtn.innerText="🔊";
+}else{
+music.pause();
+musicBtn.innerText="🔈";
+}
+});
 
-  // Кнопка включения / выключения
-  musicBtn.addEventListener("click", function(e){
-      e.stopPropagation();
-      if(music.paused){
-          music.play();
-          musicBtn.innerText = "🔊";
-      } else {
-          music.pause();
-          musicBtn.innerText = "🔈";
-      }
-  });
+/* Анимация */
+const blocks=document.querySelectorAll(".section, .final-block");
+function checkVisibility(){
+blocks.forEach(block=>{
+if(block.getBoundingClientRect().top < window.innerHeight-80){
+block.classList.add("visible");
+}
+});
+}
+checkVisibility();
+window.addEventListener("scroll", checkVisibility);
 
-  /* ===== АНИМАЦИЯ ПОЯВЛЕНИЯ ===== */
-  const blocks = document.querySelectorAll(".section, .final-block");
-
-  function checkVisibility(){
-      blocks.forEach(block=>{
-          const rect = block.getBoundingClientRect();
-          if(rect.top < window.innerHeight - 80){
-              block.classList.add("visible");
-          }
-      });
-  }
-
-  // Показываем первый экран сразу
-  checkVisibility();
-
-  window.addEventListener("scroll", checkVisibility);
-
-  /* ===== ТАЙМЕР ===== */
-  const weddingDate = new Date("2026-06-25T15:30:00").getTime();
-
-  setInterval(()=>{
-      const now = new Date().getTime();
-      const diff = weddingDate - now;
-
-      document.getElementById("days").innerText =
-        Math.floor(diff/(1000*60*60*24));
-      document.getElementById("hours").innerText =
-        Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-      document.getElementById("minutes").innerText =
-        Math.floor((diff%(1000*60*60))/(1000*60));
-      document.getElementById("seconds").innerText =
-        Math.floor((diff%(1000*60))/1000);
-  },1000);
+/* Таймер */
+const weddingDate=new Date("2026-06-25T15:30:00").getTime();
+setInterval(()=>{
+const now=new Date().getTime();
+const diff=weddingDate-now;
+document.getElementById("days").innerText=Math.floor(diff/(1000*60*60*24));
+document.getElementById("hours").innerText=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+document.getElementById("minutes").innerText=Math.floor((diff%(1000*60*60))/(1000*60));
+document.getElementById("seconds").innerText=Math.floor((diff%(1000*60))/1000);
+},1000);
 
 });
 
@@ -362,10 +309,5 @@ alert("Ошибка соединения.");
 }
 </script>
 
-  
 </body>
 </html>
-
-
-
-

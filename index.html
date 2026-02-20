@@ -32,6 +32,24 @@ transform:translateY(40px);
 transition:1.2s ease;
 }
 
+<button id="musicToggle" 
+style="
+position:fixed;
+bottom:20px;
+right:20px;
+width:50px;
+height:50px;
+border-radius:50%;
+border:none;
+background:#b39a82;
+color:white;
+font-size:20px;
+box-shadow:0 5px 15px rgba(0,0,0,0.2);
+cursor:pointer;
+z-index:1000;">
+🔈
+</button>
+  
 <audio id="bgMusic" loop>
   <source src="music.mp3" type="audio/mpeg">
 </audio>
@@ -241,35 +259,67 @@ cursor:pointer;
 
 <script>
 
-/* Музыка */
 document.addEventListener("DOMContentLoaded", function() {
+
+  /* ===== МУЗЫКА ===== */
   const music = document.getElementById("bgMusic");
+  const musicBtn = document.getElementById("musicToggle");
 
-  document.addEventListener("click", function(){
-    music.play().catch(() => {});
-  }, { once: true });
-});
-  
-/* Анимация появления */
-const blocks=document.querySelectorAll(".section, .final-block");
-window.addEventListener("scroll",()=>{
-blocks.forEach(block=>{
-if(block.getBoundingClientRect().top < window.innerHeight-100){
-block.classList.add("visible");
-}
-});
-});
+  // Первый клик по экрану запускает музыку (обязательно для iPhone)
+  document.addEventListener("click", function firstClick() {
+      music.play().then(()=>{
+          musicBtn.innerText = "🔊";
+      }).catch(()=>{});
+      document.removeEventListener("click", firstClick);
+  });
 
-/* Таймер */
-const weddingDate=new Date("2026-06-25T15:30:00").getTime();
-setInterval(()=>{
-const now=new Date().getTime();
-const diff=weddingDate-now;
-document.getElementById("days").innerText=Math.floor(diff/(1000*60*60*24));
-document.getElementById("hours").innerText=Math.floor((diff%(1000*60*60*24))/(1000*60*60));
-document.getElementById("minutes").innerText=Math.floor((diff%(1000*60*60))/(1000*60));
-document.getElementById("seconds").innerText=Math.floor((diff%(1000*60))/1000);
-},1000);
+  // Кнопка включения / выключения
+  musicBtn.addEventListener("click", function(e){
+      e.stopPropagation();
+      if(music.paused){
+          music.play();
+          musicBtn.innerText = "🔊";
+      } else {
+          music.pause();
+          musicBtn.innerText = "🔈";
+      }
+  });
+
+  /* ===== АНИМАЦИЯ ПОЯВЛЕНИЯ ===== */
+  const blocks = document.querySelectorAll(".section, .final-block");
+
+  function checkVisibility(){
+      blocks.forEach(block=>{
+          const rect = block.getBoundingClientRect();
+          if(rect.top < window.innerHeight - 80){
+              block.classList.add("visible");
+          }
+      });
+  }
+
+  // Показываем первый экран сразу
+  checkVisibility();
+
+  window.addEventListener("scroll", checkVisibility);
+
+  /* ===== ТАЙМЕР ===== */
+  const weddingDate = new Date("2026-06-25T15:30:00").getTime();
+
+  setInterval(()=>{
+      const now = new Date().getTime();
+      const diff = weddingDate - now;
+
+      document.getElementById("days").innerText =
+        Math.floor(diff/(1000*60*60*24));
+      document.getElementById("hours").innerText =
+        Math.floor((diff%(1000*60*60*24))/(1000*60*60));
+      document.getElementById("minutes").innerText =
+        Math.floor((diff%(1000*60*60))/(1000*60));
+      document.getElementById("seconds").innerText =
+        Math.floor((diff%(1000*60))/1000);
+  },1000);
+
+});
 
 /* RSVP TELEGRAM */
 function sendRSVP(){
@@ -315,6 +365,7 @@ alert("Ошибка соединения.");
   
 </body>
 </html>
+
 
 
 
